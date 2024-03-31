@@ -1,19 +1,30 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToMany,
+} from 'typeorm';
+import { Invite } from 'src/chatrooms/entities/invite.entity';
+import { Chatroom } from 'src/chatrooms/entities/chatroom.entity';
 
 @Entity()
 export class User {
-  @PrimaryColumn({ unique: true })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ unique: true })
   username: string;
 
   @Column()
   password: string;
 
-  @Column({ array: true })
-  joined_rooms: string[];
+  @ManyToMany(() => Chatroom)
+  joined_rooms: Chatroom[];
 
-  @Column({ array: true })
-  owned_rooms: string[];
+  @OneToMany(() => Chatroom, (room) => room.owner)
+  owned_rooms: Chatroom[];
 
-  @Column({ array: true })
-  pending_invites: string[];
+  @OneToMany(() => Invite, (invite) => invite.user)
+  pending_invites: Invite[];
 }

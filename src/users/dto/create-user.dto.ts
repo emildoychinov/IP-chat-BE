@@ -1,11 +1,17 @@
-import { IsString, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsAlphanumeric,
+  IsNotEmpty,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()
   @IsNotEmpty()
+  @MinLength(2, { message: 'usernames must be at least 2 symbols' })
+  @IsAlphanumeric(null, {
+    message: 'usernames must be alphanumeric',
+  })
   username: string;
 
   @IsNotEmpty()
-  @MinLength(8)
   password: string;
 }

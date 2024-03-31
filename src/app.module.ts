@@ -1,27 +1,32 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
+import { ChatroomsModule } from './chatrooms/chatrooms.module';
+
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: '127.0.0.1',
-      port: 5432,
-      username: 'ipElsys',
-      password: 'ipElsysPass',
-      database: 'ipElsysDb',
-      entities: [UsersModule],
-      /* NOTE: might remove later */
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASS,
+      database: process.env.DATABASE_DB,
+      entities: [User],
+      autoLoadEntities: true,
       synchronize: true,
-      logging: true,
     }),
     UsersModule,
+    AuthModule,
+    ChatroomsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
