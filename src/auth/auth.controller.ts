@@ -1,9 +1,16 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SkipAuth } from './auth.decorator';
+import { IsAlphanumeric, IsNotEmpty, MinLength } from 'class-validator';
 
-class AuthDto {
+export class AuthDto {
+  @IsNotEmpty()
+  @MinLength(2, { message: 'usernames must be at least 2 symbols' })
+  @IsAlphanumeric(null, {
+    message: 'usernames must be alphanumeric',
+  })
   username: string;
+  @IsNotEmpty()
   password: string;
 }
 

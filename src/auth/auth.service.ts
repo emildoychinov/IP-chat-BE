@@ -5,15 +5,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 import * as bcrypt from 'bcrypt';
 
 export interface JwtResponse {
   access_token: string;
 }
-
-const saltOrRounds = 15;
 
 @Injectable()
 export class AuthService {
@@ -39,10 +36,7 @@ export class AuthService {
       throw new HttpException('user already exists', 409);
     }
 
-    const createUserDto = new CreateUserDto();
-    createUserDto.username = username;
-    createUserDto.password = await bcrypt.hash(password, saltOrRounds);
-    this.usersService.createUser(createUserDto);
+    this.usersService.createUser(username, password);
 
     return this.buildJwt(username);
   }

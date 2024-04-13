@@ -8,7 +8,9 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { ChatroomsModule } from './chatrooms/chatrooms.module';
 
-import { User } from './users/entities/user.entity';
+import { User } from './users/user.entity';
+import { InvitesModule } from './invites/invites.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { User } from './users/entities/user.entity';
     UsersModule,
     AuthModule,
     ChatroomsModule,
+    InvitesModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
