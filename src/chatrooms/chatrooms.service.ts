@@ -8,6 +8,7 @@ import { Message } from 'src/messages/message.entity';
 import { User } from 'src/users/user.entity';
 
 import { Inject, forwardRef } from '@nestjs/common';
+import { MessagesService } from 'src/messages/messages.service';
 
 @Injectable()
 export class ChatroomsService {
@@ -15,6 +16,7 @@ export class ChatroomsService {
     @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
     @InjectRepository(Chatroom)
     private chatroomRepository: Repository<Chatroom>,
+    private messagesService: MessagesService,
   ) {}
 
   async findOne(roomName: string): Promise<Chatroom> {
@@ -46,6 +48,7 @@ export class ChatroomsService {
       );
     }
 
+    this.messagesService.deleteChatroomMessages(roomName);
     this.chatroomRepository.delete(room);
   }
 

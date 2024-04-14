@@ -19,6 +19,6 @@ export class Chatroom {
   @ManyToMany(() => User)
   members: User[];
 
-  @OneToMany(() => Message, (msg) => msg.room)
+  @OneToMany(() => Message, (msg) => msg.roomName)
   messages: Message[];
 }

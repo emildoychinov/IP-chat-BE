@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SkipAuth } from './auth.decorator';
 import { IsAlphanumeric, IsNotEmpty, MinLength } from 'class-validator';
+import { ApiTags } from '@nestjs/swagger';
 
 export class AuthDto {
   @IsNotEmpty()
@@ -14,6 +15,7 @@ export class AuthDto {
   password: string;
 }
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

@@ -12,7 +12,7 @@ import { forwardRef } from '@nestjs/common';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Invite]),
-    ChatroomsModule,
+    forwardRef(() => ChatroomsModule),
     forwardRef(() => UsersModule),
   ],
   providers: [InvitesService],

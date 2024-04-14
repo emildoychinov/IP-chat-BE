@@ -8,11 +8,13 @@ import { Chatroom } from './chatroom.entity';
 import { UsersModule } from 'src/users/users.module';
 
 import { forwardRef } from '@nestjs/common';
+import { MessagesModule } from 'src/messages/messages.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Chatroom]),
     forwardRef(() => UsersModule),
+    MessagesModule,
   ],
   providers: [ChatroomsService],
   exports: [ChatroomsService, TypeOrmModule],

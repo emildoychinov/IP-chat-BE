@@ -10,11 +10,13 @@ import {
 import { AuthUser } from 'src/auth/auth.decorator';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 export class UpdatePassDto {
   newPassword: string;
 }
 
+@ApiTags('Users')
 @Controller('user')
 export class UsersController {
   constructor(private usersService: UsersService) {}

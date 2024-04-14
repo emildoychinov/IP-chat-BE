@@ -6,6 +6,7 @@ import { UsersController } from './users.controller';
 
 import { ChatroomsModule } from 'src/chatrooms/chatrooms.module';
 import { InvitesModule } from 'src/invites/invites.module';
+import { forwardRef } from '@nestjs/common';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), ChatroomsModule, InvitesModule],

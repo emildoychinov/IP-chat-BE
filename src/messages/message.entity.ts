@@ -1,18 +1,19 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { User } from 'src/users/user.entity';
-import { Chatroom } from 'src/chatrooms/chatroom.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Message {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User, (user) => user.username)
-  sender: User;
+  @Column()
+  sender: String;
 
-  @ManyToOne(() => Chatroom, (room) => room.name)
-  room: Chatroom;
+  @Column()
+  roomName: String;
 
   @Column()
   text: string;
+
+  @Column()
+  timestamp: number;
 }

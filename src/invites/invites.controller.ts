@@ -1,6 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { InvitesService } from './invites.service';
 import { AuthUser } from 'src/auth/auth.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 export class InviteDto {
   username: string;
@@ -11,6 +12,7 @@ export class InviteOptionDto {
   inviteId: string;
 }
 
+@ApiTags('Invites')
 @Controller('invite')
 export class InvitesController {
   constructor(private invitesService: InvitesService) {}
