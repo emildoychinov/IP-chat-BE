@@ -14,6 +14,7 @@ import { InvitesService } from 'src/invites/invites.service';
 const saltOrRounds = 15;
 
 export class SelfDto {
+  username: string;
   joinedRooms: Chatroom[];
   ownedRooms: Chatroom[];
   pendingInvites: Invite[];
@@ -53,6 +54,7 @@ export class UsersService {
     }
 
     return {
+      username: username,
       joinedRooms: user.joinedRooms,
       ownedRooms: user.ownedRooms,
       pendingInvites: user.pendingInvites,
