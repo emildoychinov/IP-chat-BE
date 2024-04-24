@@ -57,7 +57,7 @@ export class UsersService {
       username: username,
       joinedRooms: user.joinedRooms,
       ownedRooms: user.ownedRooms,
-      pendingInvites: await this.invitesService.getUserInvites(user),
+      pendingInvites: await this.invitesService.getUserInvites(username),
     };
   }
 
