@@ -29,7 +29,7 @@ export class MessagesGateway {
     socket: Socket,
     dto: sendMessageDto,
   ): Promise<sendMessageResponse> {
-    let timestamp = Date.now() / 1000;
+    let timestamp = Math.round(Date.now() / 1000);
     let msgId = (
       await this.messagesService.createMessage(
         dto.roomName,
