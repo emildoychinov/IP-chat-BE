@@ -16,7 +16,7 @@ class sendMessageResponse {
   timestamp: number;
 }
 
-@WebSocketGateway(3000)
+@WebSocketGateway(3001)
 export class MessagesGateway {
   constructor(
     @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
