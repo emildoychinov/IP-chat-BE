@@ -2,8 +2,9 @@ import {
   ConnectedSocket,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { Inject, forwardRef } from '@nestjs/common';
 
 import { UsersService } from 'src/users/users.service';
@@ -22,6 +23,9 @@ class sendMessageResponse {
 
 @WebSocketGateway(3001)
 export class MessagesGateway {
+  @WebSocketServer()
+  server: Server;
+
   constructor(
     @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
     private messagesService: MessagesService,
@@ -29,7 +33,7 @@ export class MessagesGateway {
 
   @SubscribeMessage('sendMessage')
   async handleMessage(
-    socket: Socket,
+    @ConnectedSocket() _socket: Socket,
     dto: sendMessageDto,
   ): Promise<sendMessageResponse> {
     let timestamp = Math.round(Date.now() / 1000);
@@ -42,7 +46,7 @@ export class MessagesGateway {
       )
     ).raw.insertId;
 
-    socket.to(dto.roomName).emit('receiveMessage', {
+    this.server.to(dto.roomName).emit('receiveMessage', {
       msgId: msgId,
       user: dto.user,
       roomName: dto.roomName,
