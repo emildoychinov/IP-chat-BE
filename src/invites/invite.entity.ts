@@ -1,13 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { Chatroom } from 'src/chatrooms/chatroom.entity';
 
 @Entity()
 export class Invite {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @ManyToOne(() => User, (user) => user.username)
   username: string;
 
-  @Column()
+  @ManyToOne(() => Chatroom, (room) => room.name)
   roomName: string;
 }
