@@ -22,8 +22,11 @@ export class InvitesService {
   async accept(inviteId: string, username: string) {
     const invite = await this.getAndVerifyInvite(inviteId, username);
 
+    const user = await this.usersService.findOne(username);
+    const chatroom = await this.chatroomsService.findOne(invite.roomName);
+
     this.inviteRepository.delete({ id: inviteId });
-    this.usersService.joinRoom(invite.user, invite.chatroom);
+    this.usersService.joinRoom(user, chatroom);
   }
 
   async decline(inviteId: string, username: string) {
@@ -53,16 +56,15 @@ export class InvitesService {
     }
 
     const invite = new Invite();
-    invite.user = receiver;
-    invite.chatroom = await this.chatroomsService.findOne(roomName);
+    invite.username = username;
+    invite.roomName = roomName;
 
     this.inviteRepository.save(invite);
   }
 
-  async getUserInvites(user: User): Promise<Invite[]> {
+  async getUserInvites(username: string): Promise<Invite[]> {
     return this.inviteRepository.find({
-      where: { user: user },
-      relations: ['chatroom'],
+      where: { username: username },
     });
   }
 
@@ -76,7 +78,7 @@ export class InvitesService {
   ): Promise<Invite> {
     const invite = await this.inviteRepository.findOneBy({ id: inviteId });
 
-    if (invite.user.username != username) {
+    if (invite.username != username) {
       throw new HttpException(
         'no permission to interact with this invite',
         HttpStatus.FORBIDDEN,
