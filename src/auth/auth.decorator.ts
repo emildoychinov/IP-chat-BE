@@ -7,5 +7,5 @@ export const SkipAuth = () => SetMetadata(SKIP_AUTH_KEY, true);
 /* path parameter, which retrieves the user's data from the request's JWT */
 export const AuthUser = createParamDecorator((_data, ctx) => {
   const request = ctx.switchToHttp().getRequest();
-  return request.user;
+  return request.user.user;
 });
