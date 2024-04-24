@@ -46,13 +46,7 @@ export class UsersService {
   async getSelf(username: string): Promise<SelfDto> {
     let user = await this.userRepository.findOne({
       where: { username: username },
-      relations: [
-        'joinedRooms',
-        'ownedRooms',
-        'pendingInvites',
-        'pendingInvites.user',
-        'pendingInvites.chatroom',
-      ],
+      relations: ['joinedRooms', 'ownedRooms'],
     });
 
     if (!user) {
@@ -63,7 +57,7 @@ export class UsersService {
       username: username,
       joinedRooms: user.joinedRooms,
       ownedRooms: user.ownedRooms,
-      pendingInvites: user.pendingInvites,
+      pendingInvites: await this.invitesService.getUserInvites(user),
     };
   }
 

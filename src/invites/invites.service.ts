@@ -59,6 +59,10 @@ export class InvitesService {
     this.inviteRepository.save(invite);
   }
 
+  async getUserInvites(user: User): Promise<Invite[]> {
+    return this.inviteRepository.find({ where: { user: user } });
+  }
+
   async deleteUserInvites(user: User) {
     this.inviteRepository.remove(user.pendingInvites);
   }
