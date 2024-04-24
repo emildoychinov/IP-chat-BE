@@ -8,8 +8,7 @@ import {
   Body,
 } from '@nestjs/common';
 import { AuthUser } from 'src/auth/auth.decorator';
-import { UsersService } from './users.service';
-import { User } from './user.entity';
+import { UsersService, SelfDto } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
 
 export class UpdatePassDto {
@@ -24,8 +23,8 @@ export class UsersController {
   /* used mainly to get the user's `joined_rooms` and `pending_invites` */
   @HttpCode(HttpStatus.OK)
   @Get('self')
-  async getSelf(@AuthUser() username: string): Promise<User> {
-    return this.usersService.findOne(username);
+  async getSelf(@AuthUser() username: string): Promise<SelfDto> {
+    return this.usersService.getSelf(username);
   }
 
   @HttpCode(HttpStatus.OK)
