@@ -27,6 +27,10 @@ export class MessagesService {
     return this.messageRepository.insert(msg);
   }
 
+  async getRoomMessages(roomName: string): Promise<Message[]> {
+    return this.messageRepository.find({ where: { roomName: roomName } });
+  }
+
   async updateMessage(msgId: string, newText: string, username: string) {
     const msg = await this.getMsgAndVerify(msgId, username);
     msg.text = newText;

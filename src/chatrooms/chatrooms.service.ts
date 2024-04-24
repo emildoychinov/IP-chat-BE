@@ -39,9 +39,12 @@ export class ChatroomsService {
   }
 
   async messages(roomName: string, username: string): Promise<Message[]> {
-    const user = await this.usersService.findOne(username);
+    const user = await this.usersService.getSelf(username);
 
-    const roomMember = user.joinedRooms.some((room) => room.name === roomName);
+    const roomMember =
+      user.joinedRooms.some((room) => room.name === roomName) ||
+      user.ownedRooms.some((room) => room.name === roomName);
+
     if (!roomMember) {
       throw new HttpException(
         'only group members can view messages',
@@ -49,8 +52,7 @@ export class ChatroomsService {
       );
     }
 
-    const room = await this.chatroomRepository.findOneBy({ name: roomName });
-    return room.messages;
+    return this.messagesService.getRoomMessages(roomName);
   }
 
   async deleteRoom(roomName: string, username: string) {

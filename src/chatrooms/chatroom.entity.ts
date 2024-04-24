@@ -4,6 +4,7 @@ import {
   ManyToOne,
   ManyToMany,
   OneToMany,
+  JoinTable,
 } from 'typeorm';
 import { User } from 'src/users/user.entity';
 import { Message } from 'src/messages/message.entity';
@@ -20,5 +21,6 @@ export class Chatroom {
   members: User[];
 
   @OneToMany(() => Message, (msg) => msg.roomName)
+  @JoinTable()
   messages: Message[];
 }
