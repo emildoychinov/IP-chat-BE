@@ -60,7 +60,10 @@ export class InvitesService {
   }
 
   async getUserInvites(user: User): Promise<Invite[]> {
-    return this.inviteRepository.find({ where: { user: user } });
+    return this.inviteRepository.find({
+      where: { user: user },
+      relations: ['chatroom'],
+    });
   }
 
   async deleteUserInvites(user: User) {
