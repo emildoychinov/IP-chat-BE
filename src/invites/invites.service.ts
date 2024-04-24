@@ -34,7 +34,7 @@ export class InvitesService {
   }
 
   async invite(from: string, username: string, roomName: string) {
-    const sender = await this.usersService.findOne(from);
+    const sender = await this.usersService.getSelf(from);
 
     const validRoom = sender.ownedRooms.some((room) => room.name === roomName);
     if (!validRoom) {
