@@ -1,7 +1,10 @@
-import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import {
+  ConnectedSocket,
+  SubscribeMessage,
+  WebSocketGateway,
+} from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { Inject, forwardRef } from '@nestjs/common';
-import { AuthUser } from 'src/auth/auth.decorator';
 
 import { UsersService } from 'src/users/users.service';
 import { MessagesService } from './messages.service';
@@ -54,7 +57,7 @@ export class MessagesGateway {
   }
 
   @SubscribeMessage('join')
-  async joinChatrooms(socket: Socket, username: string) {
+  async joinChatrooms(@ConnectedSocket() socket: Socket, username: string) {
     let user = await this.usersService.getSelf(username);
     for (const room of user.joinedRooms) {
       socket.join(room.name);
