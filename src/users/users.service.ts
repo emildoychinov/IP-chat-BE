@@ -61,8 +61,14 @@ export class UsersService {
     };
   }
 
-  joinRoom(user: User, room: Chatroom) {
-    user.joinedRooms.push(room);
+  async joinRoom(username: string, room: Chatroom) {
+    let user = await this.findOne(username);
+    let self = await this.getSelf(username);
+
+    user.ownedRooms = self.ownedRooms;
+    user.pendingInvites = self.pendingInvites;
+    user.joinedRooms = [...self.joinedRooms, room];
+
     this.userRepository.save(user);
   }
 

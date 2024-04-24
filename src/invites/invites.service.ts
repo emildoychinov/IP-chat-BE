@@ -22,11 +22,10 @@ export class InvitesService {
   async accept(inviteId: string, username: string) {
     const invite = await this.getAndVerifyInvite(inviteId, username);
 
-    const user = await this.usersService.findOne(username);
     const chatroom = await this.chatroomsService.findOne(invite.roomName);
 
     this.inviteRepository.delete({ id: inviteId });
-    this.usersService.joinRoom(user, chatroom);
+    this.usersService.joinRoom(username, chatroom);
   }
 
   async decline(inviteId: string, username: string) {
