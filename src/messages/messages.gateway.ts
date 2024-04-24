@@ -1,5 +1,6 @@
 import {
   ConnectedSocket,
+  MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -34,7 +35,7 @@ export class MessagesGateway {
   @SubscribeMessage('sendMessage')
   async handleMessage(
     @ConnectedSocket() _socket: Socket,
-    dto: sendMessageDto,
+    @MessageBody() dto: sendMessageDto,
   ): Promise<sendMessageResponse> {
     let timestamp = Math.round(Date.now() / 1000);
     let msgId = (
