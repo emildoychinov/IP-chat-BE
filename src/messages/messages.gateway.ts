@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { MessagesService } from './messages.service';
 
 class sendMessageDto {
+  user: string;
   roomName: string;
   text: string;
 }
@@ -26,22 +27,21 @@ export class MessagesGateway {
   @SubscribeMessage('sendMessage')
   async handleMessage(
     socket: Socket,
-    @AuthUser() username: string,
     dto: sendMessageDto,
   ): Promise<sendMessageResponse> {
     let timestamp = Date.now() / 1000;
     let msgId = (
       await this.messagesService.createMessage(
         dto.roomName,
+        dto.user,
         dto.text,
-        username,
         timestamp,
       )
     ).raw.insertId;
 
     socket.to(dto.roomName).emit('receiveMessage', {
       msgId: msgId,
-      user: username,
+      user: dto.user,
       roomName: dto.roomName,
       text: dto.text,
       timestamp: timestamp,
@@ -54,7 +54,7 @@ export class MessagesGateway {
   }
 
   @SubscribeMessage('join')
-  async joinChatrooms(socket: Socket, @AuthUser() username: string) {
+  async joinChatrooms(socket: Socket, username: string) {
     let user = await this.usersService.getSelf(username);
     for (const room of user.joinedRooms) {
       socket.join(room.name);
