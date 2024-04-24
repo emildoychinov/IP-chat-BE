@@ -16,7 +16,7 @@ class sendMessageResponse {
   timestamp: number;
 }
 
-@WebSocketGateway(3001)
+@WebSocketGateway(3000)
 export class MessagesGateway {
   constructor(
     @Inject(forwardRef(() => UsersService)) private usersService: UsersService,
@@ -55,8 +55,11 @@ export class MessagesGateway {
 
   @SubscribeMessage('join')
   async joinChatrooms(socket: Socket, @AuthUser() username: string) {
-    let user = await this.usersService.findOne(username);
+    let user = await this.usersService.getSelf(username);
     for (const room of user.joinedRooms) {
+      socket.join(room.name);
+    }
+    for (const room of user.ownedRooms) {
       socket.join(room.name);
     }
   }
