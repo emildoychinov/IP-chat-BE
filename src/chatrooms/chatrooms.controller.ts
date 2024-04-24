@@ -1,9 +1,10 @@
 import {
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Param,
+  Post,
+  Get,
   Delete,
 } from '@nestjs/common';
 import { ChatroomsService } from './chatrooms.service';
@@ -16,6 +17,15 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('chatroom')
 export class ChatroomsController {
   constructor(private chatroomsService: ChatroomsService) {}
+
+  @HttpCode(HttpStatus.OK)
+  @Post(':roomName/create')
+  async createRoom(
+    @Param('roomName') roomName: string,
+    @AuthUser() username: string,
+  ) {
+    return this.chatroomsService.createRoom(roomName, username);
+  }
 
   @HttpCode(HttpStatus.OK)
   @Get(':roomName/messages')

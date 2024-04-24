@@ -23,6 +23,21 @@ export class ChatroomsService {
     return this.chatroomRepository.findOneBy({ name: roomName });
   }
 
+  async createRoom(roomName: string, username: string) {
+    const existingRoom = await this.findOne(roomName);
+    if (existingRoom) {
+      throw new HttpException('room already exists', HttpStatus.BAD_REQUEST);
+    }
+
+    const user = await this.usersService.findOne(username);
+    let room = new Chatroom();
+    room.owner = user;
+    room.members = [user];
+    room.messages = [];
+    room.name = roomName;
+    this.chatroomRepository.insert(room);
+  }
+
   async messages(roomName: string, username: string): Promise<Message[]> {
     const user = await this.usersService.findOne(username);
 
