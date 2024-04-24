@@ -38,11 +38,22 @@ export class InvitesService {
 
     const validRoom = sender.ownedRooms.some((room) => room.name === roomName);
     if (!validRoom) {
-      throw new HttpException('only room owners can invite', 401);
+      throw new HttpException(
+        'only room owners can invite',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const receiver = await this.usersService.findOne(username);
+    if (!receiver) {
+      throw new HttpException(
+        'invalid invite receiver',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const invite = new Invite();
-    invite.user = await this.usersService.findOne(username);
+    invite.user = receiver;
     invite.chatroom = await this.chatroomsService.findOne(roomName);
 
     this.inviteRepository.save(invite);
